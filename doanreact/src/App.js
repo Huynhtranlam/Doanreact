@@ -5,7 +5,9 @@ import CenteredDiv from './component/CenteredDiv.js';
 function App() {
   return (
     <div className="App">
+
       <CenteredDiv />
+
     </div>
   );
 }
