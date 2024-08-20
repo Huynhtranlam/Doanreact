@@ -1,0 +1,11 @@
+.centered-div {
+    width: 690px;
+    height: 517.5px;
+    background-color: lightgray;
+    /* Chọn màu nền để dễ thấy, có thể thay đổi */
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
