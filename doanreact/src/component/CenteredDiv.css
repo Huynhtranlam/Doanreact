@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 .centered-div {
     width: 690px;
     height: 517.5px;
@@ -8,7 +9,7 @@
     /* Chọn màu nền để dễ thấy, có thể thay đổi */
 
     position: relative;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -21,3 +22,10 @@
     transform: translate(-50%, -50%);
     width:690px;    
 }
+.custom-body{
+    background-image: url('/public/image/background.jpg');
+    background-size: fullscreen;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+  }
