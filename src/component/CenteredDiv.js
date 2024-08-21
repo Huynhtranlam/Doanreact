@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import './CenteredDiv.css';
 import SearchInput from './SearchInput';
-import { fetchMovies } from '../api'; // Đường dẫn lên một cấp
+import { fetchMovies, fetchMovieDetails } from '../api'; // Đường dẫn lên một cấp
 
 const CenteredDiv = () => {
     const [selectedMovie, setSelectedMovie] = useState(null);
 
 
     // Hàm xử lý khi chọn phim từ gợi ý
-    const handleSelectMovie = (movie) => {
-        setSelectedMovie(movie);
+    const handleSelectMovie = async (movie) => {
+        const movieDetails = await fetchMovieDetails(movie.id);
+        setSelectedMovie(movieDetails);
     };
 
     // Gọi API để lấy dữ liệu phim khi tìm kiếm
     const handleSearchMovies = async (searchTerm) => {
-        const data = await fetchMovies(searchTerm);
-        // Giả sử bạn chỉ lấy phim đầu tiên từ kết quả tìm kiếm
-        if (data.length > 0) {
-            setSelectedMovie(data[0]);
-        } else {
-            setSelectedMovie(null);
+        try {
+            const data = await fetchMovies(searchTerm);
+            return data;
+        } catch (error) {
+            console.error('Error fetching movies:', error);
+            return [];
         }
     };
     // Thiết lập hình nền dựa trên phim được chọn
@@ -49,6 +50,7 @@ const CenteredDiv = () => {
 }
 
 function Center({ movie }) {
+    console.log(movie)
     if (!movie) {
         return null; // Tránh lỗi nếu movie là null hoặc undefined
     }
@@ -99,7 +101,7 @@ function Center({ movie }) {
 
                                 <TitleandText
                                     title="Rating"
-                                    text={`${movie.vote_average} min`}
+                                    text={`${movie.vote_average} `}
                                     titleColor="#FFFFFF"
                                     textColor="#00FC87"
                                 />

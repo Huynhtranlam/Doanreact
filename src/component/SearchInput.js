@@ -17,8 +17,8 @@ const SearchInput = ({ onSearch, onSelectMovie }) => {
                 // Kiểm tra dữ liệu để đảm bảo nó là một mảng
                 if (Array.isArray(movies)) {
                     // Lọc danh sách phim dựa trên từ khóa tìm kiếm
-                    const filteredSuggestions = movies.filter(movie =>
-                        movie.original_title.toLowerCase().includes(value.toLowerCase())
+                    const filteredSuggestions = movies.filter(movies =>
+                        movies.original_title.toLowerCase().includes(value.toLowerCase())
                     );
                     setSuggestions(filteredSuggestions);
                 } else {

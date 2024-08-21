@@ -5,7 +5,7 @@ export const fetchMovies = async (searchTerm) => {
     try {
         const response = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
             params: {
-                api_key: '6ae08de6558b83f74a20051b21111e03',  // Thay thế bằng API key của bạn
+                api_key: '6ae08de6558b83f74a20051b21111e03',
                 query: searchTerm,
                 page: 1,
                 include_adult: false
@@ -15,5 +15,18 @@ export const fetchMovies = async (searchTerm) => {
     } catch (error) {
         console.error('Error fetching movie data:', error);
         return [];
+    }
+};
+export const fetchMovieDetails = async (movieId) => {
+    try {
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
+            params: {
+                api_key: '6ae08de6558b83f74a20051b21111e03'
+            }
+        });
+        return response.data; // Trả về dữ liệu chi tiết phim
+    } catch (error) {
+        console.error('Error fetching movie details:', error);
+        return null;
     }
 };
