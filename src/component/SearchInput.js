@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 
-const SearchInput = ({ movies, onSelectMovie }) => {
+const SearchInput = ({ onSearch, onSelectMovie }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState([]);
 
     // Hàm xử lý khi nhập liệu vào ô tìm kiếm
-    const handleSearchChange = (e) => {
+    const handleSearchChange = async (e) => {
         const value = e.target.value;
         setSearchTerm(value);
 
-        // Lọc gợi ý dựa trên từ khóa tìm kiếm
         if (value) {
-            const filteredSuggestions = movies.filter(movie =>
-                movie.title.toLowerCase().includes(value.toLowerCase())
-            );
-            setSuggestions(filteredSuggestions);
+            try {
+                // Gọi hàm tìm kiếm để lấy gợi ý
+                const movies = await onSearch(value);
+
+                // Kiểm tra dữ liệu để đảm bảo nó là một mảng
+                if (Array.isArray(movies)) {
+                    // Lọc danh sách phim dựa trên từ khóa tìm kiếm
+                    const filteredSuggestions = movies.filter(movie =>
+                        movie.original_title.toLowerCase().includes(value.toLowerCase())
+                    );
+                    setSuggestions(filteredSuggestions);
+                } else {
+                    // Nếu không phải mảng, xóa danh sách gợi ý
+                    setSuggestions([]);
+                }
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+                setSuggestions([]);
+            }
         } else {
             setSuggestions([]);
         }
@@ -22,7 +36,7 @@ const SearchInput = ({ movies, onSelectMovie }) => {
 
     // Hàm xử lý khi chọn gợi ý
     const handleSuggestionClick = (movie) => {
-        setSearchTerm(movie.title);
+        setSearchTerm(movie.original_title);
         setSuggestions([]);
         onSelectMovie(movie); // Gửi phim đã chọn lên component cha
     };
@@ -44,7 +58,7 @@ const SearchInput = ({ movies, onSelectMovie }) => {
                             className="p-2 hover:bg-gray-200 cursor-pointer"
                             onClick={() => handleSuggestionClick(movie)}
                         >
-                            {movie.title}
+                            {movie.original_title}
                         </div>
                     ))}
                 </div>
