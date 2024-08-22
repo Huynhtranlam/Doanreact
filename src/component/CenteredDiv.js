@@ -6,11 +6,11 @@ import { fetchMovies, fetchMovieDetails } from '../api'; // Đường dẫn lên
 const CenteredDiv = () => {
     const [selectedMovie, setSelectedMovie] = useState(null);
 
-
     // Hàm xử lý khi chọn phim từ gợi ý
     const handleSelectMovie = async (movie) => {
         const movieDetails = await fetchMovieDetails(movie.id);
         setSelectedMovie(movieDetails);
+        localStorage.setItem('selectedMovieId', movie.id); // Lưu ID của phim vào localStorage
     };
 
     // Gọi API để lấy dữ liệu phim khi tìm kiếm
@@ -23,8 +23,23 @@ const CenteredDiv = () => {
             return [];
         }
     };
+
+    // Khi component được mount, kiểm tra localStorage và tải phim dựa trên ID đã lưu
+    useEffect(() => {
+        const storedMovieId = localStorage.getItem('selectedMovieId');
+        if (storedMovieId) {
+            const fetchSelectedMovie = async () => {
+                const movieDetails = await fetchMovieDetails(storedMovieId);
+                setSelectedMovie(movieDetails);
+            };
+            fetchSelectedMovie();
+        }
+    }, []);
+
     // Thiết lập hình nền dựa trên phim được chọn
-    const backgroundImage = selectedMovie?.backdrop_path ? `url(https://image.tmdb.org/t/p/original${selectedMovie.backdrop_path})` : '/image/background.jpg';
+    const backgroundImage = selectedMovie?.backdrop_path
+        ? `url(https://image.tmdb.org/t/p/original${selectedMovie.backdrop_path})`
+        : '/image/background.jpg';
 
     return (
         <div className='custom-body' style={{ backgroundImage: backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -50,7 +65,7 @@ const CenteredDiv = () => {
 }
 
 function Center({ movie }) {
-    console.log(movie)
+    console.log(movie);
     if (!movie) {
         return null; // Tránh lỗi nếu movie là null hoặc undefined
     }
@@ -71,13 +86,12 @@ function Center({ movie }) {
                     </h3>
                     <div>
                         <TitleandText
-                            title="Description"
+                            title={movie.tagline}
                             text={movie.overview}
                             titleColor="#00FC87"
                             textColor="#FFFFFF"
                         />
                         <div>
-
                             <div className='grid grid-cols-2 gap-4'>
                                 <TitleandText
                                     title="Release Date"
@@ -91,17 +105,27 @@ function Center({ movie }) {
                                     titleColor="#FFFFFF"
                                     textColor="#00FC87"
                                 />
-
                                 <TitleandText
                                     title="Box Office:"
                                     text={`${movie.budget} $`}
                                     titleColor="#FFFFFF"
                                     textColor="#00FC87"
                                 />
-
                                 <TitleandText
                                     title="Rating"
-                                    text={`${movie.vote_average} `}
+                                    text={`${movie.vote_average}/10 `}
+                                    titleColor="#FFFFFF"
+                                    textColor="#00FC87"
+                                />
+                                <TitleandText
+                                    title="Status"
+                                    text={movie.status}
+                                    titleColor="#FFFFFF"
+                                    textColor="#00FC87"
+                                />
+                                <TitleandText
+                                    title="Country"
+                                    text={movie.production_companies[0].origin_country}
                                     titleColor="#FFFFFF"
                                     textColor="#00FC87"
                                 />
