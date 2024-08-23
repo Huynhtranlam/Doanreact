@@ -1,5 +1,5 @@
 // config.js
-const config = {
+const URL = {
     IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/original',
     API_URL: {
         BASE: 'https://api.themoviedb.org/3',
@@ -10,4 +10,5 @@ const config = {
     }
 };
 
-export default config;
+
+export default URL;

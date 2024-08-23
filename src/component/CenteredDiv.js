@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './CenteredDiv.css';
 import SearchInput from './SearchInput';
-import { fetchMovies, fetchMovieDetails } from '../api'; // Đường dẫn lên một cấp
+import { fetchMovies } from '../api'; // Đường dẫn lên một cấp
+import URL from '../constants';
+import useMovieStore from '../hooks/useMovieStore'; // Đường dẫn đến file store của bạn
 
 const CenteredDiv = () => {
-    const [selectedMovie, setSelectedMovie] = useState(null);
+    const { selectedMovie, setSelectedMovie, initializeSelectedMovie } = useMovieStore();
 
     // Hàm xử lý khi chọn phim từ gợi ý
     const handleSelectMovie = async (movie) => {
-        const movieDetails = await fetchMovieDetails(movie.id);
-        setSelectedMovie(movieDetails);
-        localStorage.setItem('selectedMovieId', movie.id); // Lưu ID của phim vào localStorage
+        await setSelectedMovie(movie.id);
     };
 
     // Gọi API để lấy dữ liệu phim khi tìm kiếm
@@ -26,19 +26,12 @@ const CenteredDiv = () => {
 
     // Khi component được mount, kiểm tra localStorage và tải phim dựa trên ID đã lưu
     useEffect(() => {
-        const storedMovieId = localStorage.getItem('selectedMovieId');
-        if (storedMovieId) {
-            const fetchSelectedMovie = async () => {
-                const movieDetails = await fetchMovieDetails(storedMovieId);
-                setSelectedMovie(movieDetails);
-            };
-            fetchSelectedMovie();
-        }
-    }, []);
+        initializeSelectedMovie();
+    }, [initializeSelectedMovie]);
 
     // Thiết lập hình nền dựa trên phim được chọn
     const backgroundImage = selectedMovie?.backdrop_path
-        ? `url(https://image.tmdb.org/t/p/original${selectedMovie.backdrop_path})`
+        ? `url(${URL.IMAGE_BASE_URL}/${selectedMovie.backdrop_path})`
         : '/image/background.jpg';
 
     return (
@@ -62,7 +55,7 @@ const CenteredDiv = () => {
             </div>
         </div>
     );
-}
+};
 
 function Center({ movie }) {
     console.log(movie);
@@ -73,11 +66,11 @@ function Center({ movie }) {
     return (
         <div className='centered-div'>
             <div className='flex w-full h-full bg-black bg-opacity-80 backdrop-blur-sm'>
-                <div className='w-80 h-full'>
+                <div className='w-80 h-cover'>
                     <img
                         src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                         alt="Description"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full "
                     />
                 </div>
                 <div className="flex-1 flex flex-col p-4">
@@ -125,7 +118,7 @@ function Center({ movie }) {
                                 />
                                 <TitleandText
                                     title="Country"
-                                    text={movie.production_companies[0].origin_country}
+                                    text={movie.production_companies?.[0]?.origin_country || 'Unknown Country'}
                                     titleColor="#FFFFFF"
                                     textColor="#00FC87"
                                 />

@@ -1,9 +1,9 @@
 // src/api.js
 import axios from 'axios';
-import ABC from './constants';
+import URL from './constants';
 export const fetchMovies = async (searchTerm) => {
     try {
-        const response = await axios.get(`${ABC.API_URL.BASE}${ABC.API_URL.PATH.SEARCH}`, {
+        const response = await axios.get(`${URL.API_URL.BASE}${URL.API_URL.PATH.SEARCH}`, {
             params: {
                 api_key: '6ae08de6558b83f74a20051b21111e03',
                 query: searchTerm,
@@ -19,7 +19,7 @@ export const fetchMovies = async (searchTerm) => {
 };
 export const fetchMovieDetails = async (movieId) => {
     try {
-        const response = await axios.get(`${ABC.API_URL.BASE}${ABC.API_URL.PATH.MOVIE}/${movieId}`, {
+        const response = await axios.get(`${URL.API_URL.BASE}${URL.API_URL.PATH.MOVIE}/${movieId}`, {
             params: {
                 api_key: '6ae08de6558b83f74a20051b21111e03'
             }
