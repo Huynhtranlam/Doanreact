@@ -15,10 +15,11 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/login', {
+            const response = await axios.post('http://localhost:4000/api/auth/login', {
                 email,
                 password
             });
+            console.log(response.data);
             navigate('/movie'); // Chuyển hướng nếu thông tin đăng nhập chính xác
         } catch (error) {
             alert('Invalid email or password.'); // Hiển thị thông báo lỗi nếu thông tin không khớp

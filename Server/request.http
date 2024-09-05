@@ -1,0 +1,20 @@
+POST  http://localhost:4000/movie/
+Content-Type: application/json
+
+{
+    "id": 9999,
+    "adult": false,
+    "backdrop_path": "/example.jpg",
+    "budget": 50000000,
+    "homepage": "http://example.com",
+    "original_language": "en",
+    "original_title": "Example Movie",
+    "overview": "An example movie description.",
+    "poster_path": "/example_poster.jpg",
+    "release_date": "2024-01-01",
+    "runtime": 120,
+    "status": "Released",
+    "tagline": "An example tagline.",
+    "title": "Example Movie",
+    "vote_average": 7.5
+}
