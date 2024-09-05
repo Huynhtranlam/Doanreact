@@ -27,7 +27,7 @@ const CenteredDiv = () => {
     // Khi component được mount, kiểm tra localStorage và tải phim dựa trên ID đã lưu
     useEffect(() => {
         initializeSelectedMovie();
-    }, [initializeSelectedMovie]);
+        }, [initializeSelectedMovie]);
 
     // Thiết lập hình nền dựa trên phim được chọn
     const backgroundImage = selectedMovie?.backdrop_path

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -7,46 +8,33 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [username, setUsername] = useState('');
     const backgroundImage = 'url(/image/background.jpg)';
-    const savedAccounts = JSON.parse(localStorage.getItem('accounts')) || [];
 
     const navigate = useNavigate();
 
-    const handleEmailChange = (e) => {
-        setEmail(e.target.value);
-    };
+    const handleEmailChange = (e) => setEmail(e.target.value);
+    const handlePasswordChange = (e) => setPassword(e.target.value);
+    const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
+    const handleUsernameChange = (e) => setUsername(e.target.value);
 
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const handleConfirmPasswordChange = (e) => {
-        setConfirmPassword(e.target.value);
-    };
-
-    const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (password !== confirmPassword) {
             alert("Passwords don't match!");
             return;
         }
 
-        // Tạo ID tự động
-        const newID = savedAccounts.length ? savedAccounts[savedAccounts.length - 1].ID + 1 : 1;
+        try {
+            await axios.post('http://localhost:4000/api/auth/register', {
+                email,
+                password,
+                username
+            });
 
-        const newAccount = {
-            ID: newID,
-            NAME: username, // Sử dụng username để lưu
-            EMAIL: email, // Sử dụng email nếu cần thiết
-            PASSWORD: password
-        };
-        savedAccounts.push(newAccount);
-        localStorage.setItem('accounts', JSON.stringify(savedAccounts));
-
-        navigate('/');
+            navigate('/');
+        } catch (error) {
+            alert('Error registering account.');
+        }
     };
 
     return (
@@ -54,7 +42,7 @@ const Register = () => {
             className='custom-body'
             style={{ backgroundImage: backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-            <div className="flex items-center justify-center min-h-screen ">
+            <div className="flex items-center justify-center min-h-screen">
                 <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow">
                     <h2 className="text-2xl font-bold text-center text-gray-900">Register</h2>
                     <form onSubmit={handleSubmit} className="space-y-6">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -10,17 +11,16 @@ const Login = () => {
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Lấy thông tin từ localStorage
-        const savedAccounts = JSON.parse(localStorage.getItem('accounts')) || [];
-        const account = savedAccounts.find(acc => acc.ID === email);
-
-        // Kiểm tra thông tin đăng nhập
-        if (account && password === account.PASSWORD) {
+        try {
+            const response = await axios.post('http://localhost:5000/api/auth/login', {
+                email,
+                password
+            });
             navigate('/movie'); // Chuyển hướng nếu thông tin đăng nhập chính xác
-        } else {
+        } catch (error) {
             alert('Invalid email or password.'); // Hiển thị thông báo lỗi nếu thông tin không khớp
         }
     };
@@ -47,7 +47,6 @@ const Login = () => {
         </div>
     );
 };
-
 const LoginForm = ({ email, password, onEmailChange, onPasswordChange, onSubmit, onSignUpRedirect }) => {
     return (
         <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow">
